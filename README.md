@@ -1,1 +1,1 @@
-# EM_practice_Mironov_K on Java block 2
+# EM_practice_Mironov_K on Java block
