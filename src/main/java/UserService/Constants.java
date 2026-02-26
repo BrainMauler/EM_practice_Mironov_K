@@ -1,4 +1,4 @@
-package utils;
+package UserService;
 
 import lombok.experimental.UtilityClass;
 
