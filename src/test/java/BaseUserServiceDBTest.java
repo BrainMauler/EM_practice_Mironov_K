@@ -1,5 +1,11 @@
-import UserService.Role;
-import UserService.User;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import org.junit.jupiter.api.BeforeAll;
+import userservice.pojo.Role;
+import userservice.dao.RoleDAO;
+import userservice.pojo.User;
+import userservice.dao.UserDAO;
+import exceptions.DBClearingException;
 import org.junit.jupiter.api.AfterAll;
 
 import java.sql.Connection;
@@ -7,14 +13,24 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static UserService.Constants.*;
+import static userservice.Constants.*;
 import static utils.DBConnector.*;
+import static utils.Logger.*;
 
 public abstract class BaseUserServiceDBTest {
 
     protected static Connection connection = getDBConnection(USER_SERVICE_DB_URL,
                                                              USER_SERVICE_DB_USERNAME,
                                                              USER_SERVICE_DB_PASSWORD);
+
+    protected static MongoCollection<Document> collection = getMongoCollection("",
+                                                                               "",
+                                                                               "");
+
+    @BeforeAll
+    protected static void clearLogsBeforeTests() {
+        clearLogs(collection);
+    }
 
     protected static User user1 =
             new User(1, "Sasha", "qwerty1", new HashSet<>(Set.of(100)));
@@ -26,16 +42,31 @@ public abstract class BaseUserServiceDBTest {
             new User(4, "Fedya", "qwerty4", new HashSet<>(Set.of(100, 200)));
     protected static User user5 =
             new User(5, "Petya", "qwerty5", new HashSet<>(Set.of(100, 200, 300)));
+    protected static User user6 =
+            new User(6, "NullPasswordUser", null, new HashSet<>(Set.of(100)));
     protected static Role role1 = new Role(100, "user");
     protected static Role role2 = new Role(200, "moder");
     protected static Role role3 = new Role(300, "admin");
     protected static Role role4 = new Role(400, "extended_user");
 
     @AfterAll
-    protected static void closeConnection() {
-        closeDBConnection(connection);
-        Stream.of(user1, user2, user3, user4, user5, role1, role2, role3, role4)
-                .map(object -> null)
+    protected static void clearUp() {
+        boolean deleteUsersCheck = Stream.of(user1, user2, user3, user4, user5, user6)
+                .filter(user ->
+                        user.getUsername().equals(UserDAO.getUsernameById(user, connection)))
+                .allMatch(user -> UserDAO.deleteUser(user, connection));
+        boolean deleteRolesCheck = Stream.of(role1, role2, role3, role4)
+                .filter(role ->
+                        role.getRoleName().equals(RoleDAO.getRoleNameById(role, connection)))
+                .allMatch(role -> RoleDAO.deleteRole(role, connection));
+        Stream.of(user1, user2, user3, user4, user5, user6, role1, role2, role3, role4)
+                .map(object -> object = null)
                 .close();
+        closeDBConnection(connection);
+        clearLogs(collection);
+        if (!deleteUsersCheck || !deleteRolesCheck) {
+            throw new DBClearingException("База данных не очищена от тестовых данных до конца," +
+                                           " требуется ручное вмешательство");
+        }
     }
 }

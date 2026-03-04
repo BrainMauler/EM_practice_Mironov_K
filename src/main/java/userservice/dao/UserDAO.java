@@ -1,6 +1,7 @@
-package UserService;
+package userservice.dao;
 
 import lombok.experimental.UtilityClass;
+import userservice.pojo.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
