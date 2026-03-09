@@ -8,4 +8,7 @@ public class Constants {
     public final String USER_SERVICE_DB_USERNAME = "";
     public final String USER_SERVICE_DB_URL = "";
     public final String USER_SERVICE_DB_PASSWORD = "";
+    public final String LOGGER_MONGODB_URL = "";
+    public final String LOGGER_MONGODB_NAME = "";
+    public final String LOGGER_MONGODB_COLLECTION = "test_logs";
 }
