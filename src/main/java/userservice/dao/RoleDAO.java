@@ -55,11 +55,14 @@ public class RoleDAO {
 
     public String getRoleNameById(Role role, Connection connection) {
         String sql = "SELECT role_name FROM roles WHERE id = ?";
-        String roleName;
+        String roleName = null;
         try (connection; PreparedStatement usersStatement = connection.prepareStatement(sql)) {
             usersStatement.setInt(1, role.getId());
-            ResultSet set = usersStatement.executeQuery();
-            roleName = set.getString("role_name");
+            try (ResultSet set = usersStatement.executeQuery()) {
+                if (set.next()) {
+                    roleName = set.getString("role_name");
+                }
+            }
         } catch (SQLException exception) {
             exception.printStackTrace();
             return null;

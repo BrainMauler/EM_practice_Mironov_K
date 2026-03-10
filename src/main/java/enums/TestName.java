@@ -19,7 +19,9 @@ public enum TestName {
     UPDATE_USER_TEST_POS("Обновление существующего пользователя в таблице users"),
     UPDATE_USER_TEST_NEG("Обновление существующего пользователя в таблице users(нег)"),
     UPDATE_ROLE_TEST_POS("Обновление существующей роли в таблице roles"),
-    UPDATE_ROLE_TEST_NEG("Обновление существующей роли в таблице roles(нег)");
+    UPDATE_ROLE_TEST_NEG("Обновление существующей роли в таблице roles(нег)"),
+    DELETE_USER_TEST("Удаление существующего пользователя из таблицы users"),
+    DELETE_ROLE_TEST("Удаление существующей роли из таблицы roles");
 
     private final String operation;
 

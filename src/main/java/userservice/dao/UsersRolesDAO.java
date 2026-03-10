@@ -62,9 +62,10 @@ public class UsersRolesDAO {
         HashSet<Integer> rolesId = new HashSet<>();
         try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, user.getId());
-            ResultSet set = statement.executeQuery();
-            while (set.next()) {
-                rolesId.add(set.getInt("user_id"));
+            try (ResultSet set = statement.executeQuery()) {
+                while (set.next()) {
+                    rolesId.add(set.getInt("user_id"));
+                }
             }
         } catch (SQLException exception) {
             exception.printStackTrace();

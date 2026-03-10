@@ -122,4 +122,28 @@ public class UserServiceDBTests extends BaseUserServiceDBTest {
         AssertsUtils.assertSQLThrowsWithLogs(() -> RoleDAO.updateRole(role1, id, RoleName, CONNECTION),
                 UPDATE_ROLE_TEST_NEG, UPDATE_ROLE_TEST_NEG_OP + id, COLLECTION);
     }
+
+    @Test
+    @DisplayName("Удаление пользователя из таблицы users")
+    void deleteUserTest() {
+        AssertsUtils.assertTrueWithLogs(UserDAO.insertUser(userDel, CONNECTION),
+                INSERT_USER_TEST_POS, INSERT_USER_TEST_POS_OP + userDel.getId(), COLLECTION);
+        Assertions.assertEquals(userDel.getUsername(), UserDAO.getUsernameById(userDel, CONNECTION));
+        Assertions.assertEquals(userDel.getRoles(), UsersRolesDAO.getRolesIdByUser(userDel, CONNECTION));
+        AssertsUtils.assertTrueWithLogs(UserDAO.deleteUser(userDel, CONNECTION),
+                DELETE_USER_TEST, DELETE_USER_TEST_OP + userDel.getId(), COLLECTION);
+        Assertions.assertNotEquals(userDel.getUsername(), UserDAO.getUsernameById(userDel, CONNECTION));
+        Assertions.assertNotEquals(userDel.getRoles(), UsersRolesDAO.getRolesIdByUser(userDel, CONNECTION));
+    }
+
+    @Test
+    @DisplayName("Удаление роли из таблицы roles")
+    void deleteRoleTest() {
+        AssertsUtils.assertTrueWithLogs(RoleDAO.insertRole(roleDel, CONNECTION),
+                INSERT_ROLE_TEST_POS, INSERT_ROLE_TEST_POS_OP + roleDel.getId(), COLLECTION);
+        Assertions.assertEquals(roleDel.getRoleName(), RoleDAO.getRoleNameById(roleDel, CONNECTION));
+        AssertsUtils.assertTrueWithLogs(RoleDAO.deleteRole(roleDel, CONNECTION),
+                DELETE_ROLE_TEST, DELETE_ROLE_TEST_OP + roleDel.getId(), COLLECTION);
+        Assertions.assertNotEquals(roleDel.getRoleName(), RoleDAO.getRoleNameById(roleDel, CONNECTION));
+    }
 }

@@ -61,11 +61,14 @@ public class UserDAO {
 
     public String getUsernameById(User user, Connection connection) {
         String sql = "SELECT username FROM users WHERE id = ?";
-        String username;
+        String username = null;
         try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, user.getId());
-            ResultSet set = statement.executeQuery();
-            username = set.getString("username");
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    username = set.getString("username");
+                }
+            }
         } catch (SQLException exception) {
             exception.printStackTrace();
             return null;
@@ -75,11 +78,14 @@ public class UserDAO {
 
     public String getPasswordById(User user, Connection connection) {
         String sql = "SELECT password FROM users WHERE id = ?";
-        String password;
+        String password = null;
         try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, user.getId());
-            ResultSet set = statement.executeQuery();
-            password = set.getString("username");
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    password = set.getString("username");
+                }
+            }
         } catch (SQLException exception) {
             exception.printStackTrace();
             return null;

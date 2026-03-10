@@ -22,14 +22,14 @@ import static utils.Logger.*;
 public abstract class BaseUserServiceDBTest {
 
     protected static final Connection CONNECTION = getDBConnection(USER_SERVICE_DB_URL,
-                                                                   USER_SERVICE_DB_USERNAME,
-                                                                   USER_SERVICE_DB_PASSWORD);
+            USER_SERVICE_DB_USERNAME,
+            USER_SERVICE_DB_PASSWORD);
 
     protected static final MongoClient CLIENT = getMongoClient(LOGGER_MONGODB_URL);
 
     protected static final MongoCollection<Document> COLLECTION = getMongoCollection(LOGGER_MONGODB_NAME,
-                                                                                     LOGGER_MONGODB_COLLECTION,
-                                                                                     CLIENT);
+            LOGGER_MONGODB_COLLECTION,
+            CLIENT);
 
     @BeforeAll
     protected static void clearLogsBeforeTests() {
@@ -48,11 +48,14 @@ public abstract class BaseUserServiceDBTest {
             new User(5, "Petya", "qwerty5", new HashSet<>(Set.of(100, 200, 300)));
     protected static User user6 =
             new User(6, "NullPasswordUser", null, new HashSet<>(Set.of(100)));
+    protected static User userDel =
+            new User(7, "UserForDelete", "qwerty7", new HashSet<>(Set.of(100)));
 
     protected static Role role1 = new Role(100, "user");
     protected static Role role2 = new Role(200, "moder");
     protected static Role role3 = new Role(300, "admin");
     protected static Role role4 = new Role(400, "extended_user");
+    protected static Role roleDel = new Role(500, "roleForDelete");
 
     protected static final String INSERT_USER_TEST_POS = TestName.INSERT_USER_TEST_POS.camel();
     protected static final String INSERT_ROLE_TEST_POS = TestName.INSERT_ROLE_TEST_POS.camel();
@@ -65,6 +68,8 @@ public abstract class BaseUserServiceDBTest {
     protected static final String UPDATE_USER_TEST_NEG = TestName.UPDATE_USER_TEST_NEG.camel();
     protected static final String UPDATE_ROLE_TEST_POS = TestName.UPDATE_ROLE_TEST_POS.camel();
     protected static final String UPDATE_ROLE_TEST_NEG = TestName.UPDATE_ROLE_TEST_NEG.camel();
+    protected static final String DELETE_USER_TEST = TestName.DELETE_USER_TEST.camel();
+    protected static final String DELETE_ROLE_TEST = TestName.DELETE_ROLE_TEST.camel();
 
     protected static final String INSERT_USER_TEST_POS_OP = TestName.INSERT_USER_TEST_POS.getOperation();
     protected static final String INSERT_ROLE_TEST_POS_OP = TestName.INSERT_ROLE_TEST_POS.getOperation();
@@ -77,6 +82,8 @@ public abstract class BaseUserServiceDBTest {
     protected static final String UPDATE_USER_TEST_NEG_OP = TestName.UPDATE_USER_TEST_NEG.getOperation();
     protected static final String UPDATE_ROLE_TEST_POS_OP = TestName.UPDATE_ROLE_TEST_POS.getOperation();
     protected static final String UPDATE_ROLE_TEST_NEG_OP = TestName.UPDATE_ROLE_TEST_NEG.getOperation();
+    protected static final String DELETE_USER_TEST_OP = TestName.DELETE_USER_TEST.getOperation();
+    protected static final String DELETE_ROLE_TEST_OP = TestName.DELETE_ROLE_TEST.getOperation();
 
     @AfterAll
     protected static void clearUp() {
@@ -93,7 +100,7 @@ public abstract class BaseUserServiceDBTest {
         closeMongoClient(CLIENT);
         if (!deleteUsersCheck || !deleteRolesCheck) {
             throw new DBClearingException("База данных не очищена от тестовых данных до конца," +
-                                           " требуется ручное вмешательство");
+                    " требуется ручное вмешательство");
         }
     }
 }
