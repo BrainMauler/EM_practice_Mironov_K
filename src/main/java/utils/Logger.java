@@ -29,13 +29,9 @@ public class Logger {
     public static MongoCollection<Document> getMongoCollection(String mongoDBName,
                                                                String collectionMongoDBName,
                                                                MongoClient client) {
-        MongoCollection<Document> mongoCollection;
-        try (client) {
-            mongoCollection = client
-                    .getDatabase(mongoDBName)
-                    .getCollection(collectionMongoDBName);
-        }
-        return mongoCollection;
+        return client
+                .getDatabase(mongoDBName)
+                .getCollection(collectionMongoDBName);
     }
 
     public void clearLogs(MongoCollection<Document> mongoCollection) {

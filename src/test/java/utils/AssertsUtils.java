@@ -5,7 +5,6 @@ import lombok.experimental.UtilityClass;
 import org.bson.Document;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;
-import userservice.dao.UserDAO;
 
 import java.sql.SQLException;
 

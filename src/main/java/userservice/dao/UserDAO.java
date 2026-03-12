@@ -2,7 +2,6 @@ package userservice.dao;
 
 import lombok.experimental.UtilityClass;
 import userservice.pojo.User;
-import utils.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +14,7 @@ public class UserDAO {
     public boolean insertUser(User user, Connection connection) {
         String sql = "INSERT INTO users (id, username, password) VALUES (?, ?, ?)";
         int affectedUsersRows;
-        try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, user.getId());
             statement.setString(2, user.getUsername());
             statement.setString(3, user.getPassword());
@@ -33,7 +32,7 @@ public class UserDAO {
                               String password, Connection connection) {
         String sql = "UPDATE users SET id = ?, username = ?, password = ? WHERE id = ?";
         int affectedRows;
-        try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.setString(2, username);
             statement.setString(3, password);
@@ -49,7 +48,7 @@ public class UserDAO {
     public boolean deleteUser(User user, Connection connection) {
         String sql = "DELETE FROM users WHERE id = ?";
         int affectedUsersRows;
-        try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, user.getId());
             affectedUsersRows = statement.executeUpdate();
         } catch (SQLException exception) {
@@ -62,7 +61,7 @@ public class UserDAO {
     public String getUsernameById(User user, Connection connection) {
         String sql = "SELECT username FROM users WHERE id = ?";
         String username = null;
-        try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, user.getId());
             try (ResultSet set = statement.executeQuery()) {
                 if (set.next()) {
@@ -79,7 +78,7 @@ public class UserDAO {
     public String getPasswordById(User user, Connection connection) {
         String sql = "SELECT password FROM users WHERE id = ?";
         String password = null;
-        try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, user.getId());
             try (ResultSet set = statement.executeQuery()) {
                 if (set.next()) {

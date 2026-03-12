@@ -14,7 +14,7 @@ public class RoleDAO {
     public boolean insertRole(Role role, Connection connection) {
         String sql = "INSERT INTO roles (id, role_name) VALUES (?, ?)";
         int affectedRows;
-        try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, role.getId());
             statement.setString(2, role.getRoleName());
             affectedRows = statement.executeUpdate();
@@ -28,7 +28,7 @@ public class RoleDAO {
     public boolean updateRole(Role role, int id, String role_name, Connection connection) {
         String sql = "UPDATE roles SET id = ?, role_name = ? WHERE id = ?";
         int affectedRows;
-        try (connection; PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.setString(2, role_name);
             statement.setInt(3, role.getId());
@@ -43,7 +43,7 @@ public class RoleDAO {
     public boolean deleteRole(Role role, Connection connection) {
         String sql = "DELETE FROM roles WHERE id = ?";
         int affectedUsersRows;
-        try (connection; PreparedStatement usersStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement usersStatement = connection.prepareStatement(sql)) {
             usersStatement.setInt(1, role.getId());
             affectedUsersRows = usersStatement.executeUpdate();
         } catch (SQLException exception) {
@@ -56,7 +56,7 @@ public class RoleDAO {
     public String getRoleNameById(Role role, Connection connection) {
         String sql = "SELECT role_name FROM roles WHERE id = ?";
         String roleName = null;
-        try (connection; PreparedStatement usersStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement usersStatement = connection.prepareStatement(sql)) {
             usersStatement.setInt(1, role.getId());
             try (ResultSet set = usersStatement.executeQuery()) {
                 if (set.next()) {
