@@ -69,4 +69,48 @@ public class RoleDAO {
         }
         return roleName;
     }
+
+    public String getRoleNameById(int id, Connection connection) {
+        String sql = "SELECT role_name FROM roles WHERE id = ?";
+        String roleName = null;
+        try (PreparedStatement usersStatement = connection.prepareStatement(sql)) {
+            usersStatement.setInt(1, id);
+            try (ResultSet set = usersStatement.executeQuery()) {
+                if (set.next()) {
+                    roleName = set.getString("role_name");
+                }
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return null;
+        }
+        return roleName;
+    }
+
+    public boolean clearRolesTable(Connection connection) {
+        String sql = "DELETE FROM roles";
+        int affectedRows;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            affectedRows = statement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+        return affectedRows > 0;
+    }
+
+    public boolean tableRolesIsEmpty(Connection connection) {
+        String sql = "SELECT COUNT(*) FROM roles";
+        int result = -1;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet set = statement.executeQuery();
+            if (set.next()) {
+                result = set.getInt(1);
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+        return result == 0;
+    }
 }

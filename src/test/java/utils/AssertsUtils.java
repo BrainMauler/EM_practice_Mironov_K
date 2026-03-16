@@ -13,6 +13,7 @@ public class AssertsUtils {
 
     public void assertTrueWithLogs(boolean assertValue, String testName, String operation,
                                    MongoCollection<Document> collection) {
+        boolean failCheck = false;
         try {
             Assertions.assertTrue(assertValue);
         } catch (AssertionError error) {
@@ -21,17 +22,21 @@ public class AssertsUtils {
                     "operation", operation,
                     "status", "FAILED",
                     collection));
+            failCheck = true;
             error.printStackTrace();
         }
-        Logger.log(testName, operation, "PASSED", collection);
-        Assertions.assertTrue(Logger.validateLogsByEntries("test", testName,
-                "operation", operation,
-                "status", "PASSED",
-                collection));
+        if (!failCheck) {
+            Logger.log(testName, operation, "PASSED", collection);
+            Assertions.assertTrue(Logger.validateLogsByEntries("test", testName,
+                    "operation", operation,
+                    "status", "PASSED",
+                    collection));
+        }
     }
 
     public void assertSQLThrowsWithLogs(Executable assertExpression, String testName, String operation,
                                         MongoCollection<Document> collection) {
+        boolean failCheck = false;
         try {
             Assertions.assertThrows(SQLException.class, assertExpression);
         } catch (AssertionError error) {
@@ -40,12 +45,15 @@ public class AssertsUtils {
                     "operation", operation,
                     "status", "FAILED",
                     collection));
+            failCheck = true;
             error.printStackTrace();
         }
-        Logger.log(testName, operation, "PASSED", collection);
-        Assertions.assertTrue(Logger.validateLogsByEntries("test", testName,
-                "operation", operation,
-                "status", "PASSED",
-                collection));
+        if (!failCheck) {
+            Logger.log(testName, operation, "PASSED", collection);
+            Assertions.assertTrue(Logger.validateLogsByEntries("test", testName,
+                    "operation", operation,
+                    "status", "PASSED",
+                    collection));
+        }
     }
 }

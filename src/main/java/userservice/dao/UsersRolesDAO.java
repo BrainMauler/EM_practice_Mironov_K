@@ -22,7 +22,7 @@ public class UsersRolesDAO {
         int usersRolesDeleteCount = 0;
         int affectedRows;
         String insertSql = "INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)";
-        String deleteSql = "DELETE * FROM users_roles WHERE user_id = ? AND role_id = ?";
+        String deleteSql = "DELETE FROM users_roles WHERE user_id = ? AND role_id = ?";
         try {
             diffInsertSet = user.getRoles();
             diffInsertSet.removeAll(getRolesIdByUser(user, connection));
@@ -69,7 +69,7 @@ public class UsersRolesDAO {
             statement.setInt(1, user.getId());
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
-                    rolesId.add(set.getInt("user_id"));
+                    rolesId.add(set.getInt("role_id"));
                 }
             }
         } catch (SQLException exception) {

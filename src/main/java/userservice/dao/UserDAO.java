@@ -91,4 +91,65 @@ public class UserDAO {
         }
         return password;
     }
+
+    public String getUsernameById(int id, Connection connection) {
+        String sql = "SELECT username FROM users WHERE id = ?";
+        String username = null;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    username = set.getString("username");
+                }
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return null;
+        }
+        return username;
+    }
+
+    public String getPasswordById(int id, Connection connection) {
+        String sql = "SELECT password FROM users WHERE id = ?";
+        String password = null;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    password = set.getString("password");
+                }
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return null;
+        }
+        return password;
+    }
+
+    public boolean clearUsersTable(Connection connection) {
+        String sql = "DELETE FROM users";
+        int affectedRows;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            affectedRows = statement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+        return affectedRows > 0;
+    }
+
+    public boolean tableUsersIsEmpty(Connection connection) {
+        String sql = "SELECT COUNT(*) FROM users";
+        int result = -1;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet set = statement.executeQuery();
+            if (set.next()) {
+                result = set.getInt(1);
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+        return result == 0;
+    }
 }
