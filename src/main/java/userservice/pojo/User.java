@@ -17,4 +17,12 @@ public class User {
     private String username;
     private String password;
     private HashSet<Integer> roles;
+
+    public static void switchUserRoles(User user, Role roleToAdd,
+                                       Role roleToRemove) {
+        HashSet<Integer> newUserRolesSet = new HashSet<>(user.getRoles());
+        newUserRolesSet.add(roleToAdd.getId());
+        newUserRolesSet.remove(roleToRemove.getId());
+        user.setRoles(newUserRolesSet);
+    }
 }

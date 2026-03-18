@@ -2,6 +2,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import enums.TestName;
 import org.bson.Document;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import userservice.pojo.Role;
 import userservice.dao.RoleDAO;
@@ -76,6 +77,12 @@ public abstract class BaseUserServiceDBTest {
     protected static final String UPDATE_ROLE_TEST_NEG_OP = TestName.UPDATE_ROLE_TEST_NEG.getOperation();
     protected static final String DELETE_USER_TEST_OP = TestName.DELETE_USER_TEST.getOperation();
     protected static final String DELETE_ROLE_TEST_OP = TestName.DELETE_ROLE_TEST.getOperation();
+
+    @AfterEach
+    protected void clearRelatesAfterTests() {
+        UserDAO.clearUsersTable(CONNECTION);
+        RoleDAO.clearRolesTable(CONNECTION);
+    }
 
     @AfterAll
     protected static void clearUp() {
